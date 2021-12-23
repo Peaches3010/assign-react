@@ -1,19 +1,34 @@
-import React from "react";
-
+import React, { useState, useContext } from "react";
+import { Context } from "../../../store/context/context";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 const AddTask = () => {
+  const { dispatchTasks } = useContext(Context);
+  const history = useHistory();
+  const [task, setTask] = useState({
+    title: "",
+    description: "",
+    status: 0,
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatchTasks({ type: "ADD_TASK", task });
+    toast.success("Add task sucessfully!", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+    history.push("/");
+  };
   return (
     <div>
       <button
         type="button"
         className="btn btn-danger flex-center"
-        onClick={"null"}
+        onClick={() => {
+          history.goback();
+        }}
       >
-        <ion-icon
-          style={{ marginRight: "0.5rem" }}
-          className="btn-icon"
-          name="arrow-back-circle"
-        />
-        Back
+        <ion-icon class="btn-icon" name="arrow-back-circle"></ion-icon>Back
       </button>
       <ul
         className="nav nav-tabs justify-content-end"
@@ -42,7 +57,7 @@ const AddTask = () => {
           role="tabpanel"
           aria-labelledby="add-tab"
         >
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="title" className="form-label">
                 Title
@@ -53,6 +68,9 @@ const AddTask = () => {
                 id="title"
                 name="title"
                 placeholder="Insert the title"
+                value={task.title}
+                onChange={(e) => setTask({ ...task, title: e.target.value })}
+                required
               />
             </div>
             <div className="mb-3">
@@ -60,45 +78,85 @@ const AddTask = () => {
                 className="form-control"
                 id="description"
                 name="description"
-                placeholder="Insert a suitable description"
                 rows={3}
-              ></textarea>
+                value={task.description}
+                onChange={(e) =>
+                  setTask({ ...task, description: e.target.value })
+                }
+                placeholder="Insert a suitable description"
+                required
+              />
             </div>
-            <div className="p-3 mb-2 bg-light text-dark"> Status </div>
-            <div className="flex-start">
-              <div className="form-check">
+            <div className="p-3 mb-2 bg-light text-dark">Status</div>
+            <div className="d-flex">
+              <div className="form-check" style={{ marginRight: "1rem" }}>
                 <input
+                  className="form-check-input"
                   type="radio"
                   name="status"
-                  className="form-check-input"
+                  value={0}
+                  checked={task.status === 0}
+                  onChange={(e) =>
+                    setTask({ ...task, status: parseInt(e.target.value) })
+                  }
                   id="0"
                 />
-                <label htmlFor="0" className="form-check-label">
-                  New
+                <label className="form-check-label" htmlFor="0">
+                  Now
                 </label>
               </div>
-              <div className="form-check">
+              <div className="form-check" style={{ marginRight: "1rem" }}>
                 <input
+                  className="form-check-input"
+                  value={1}
                   type="radio"
                   name="status"
-                  className="form-check-input"
                   id="1"
+                  onChange={(e) =>
+                    setTask({ ...task, status: parseInt(e.target.value) })
+                  }
                 />
-                <label htmlFor="0" className="form-check-label">
-                  in Progress
+                <label className="form-check-label" htmlFor="1">
+                  In process
                 </label>
               </div>
-              <div className="form-check">
+              <div className="form-check" style={{ marginRight: "1rem" }}>
                 <input
+                  className="form-check-input"
+                  value={2}
                   type="radio"
                   name="status"
-                  className="form-check-input"
-                  id="3"
+                  id="2"
+                  onChange={(e) =>
+                    setTask({ ...task, status: parseInt(e.target.value) })
+                  }
                 />
-                <label htmlFor="0" className="form-check-label">
+                <label className="form-check-label" htmlFor="2">
                   Done
                 </label>
               </div>
+            </div>
+            <div className="d-flex justify-content-end">
+              <button
+                type="submit"
+                className="btn btn-primary flex-center mr-1"
+              >
+                <ion-icon class="btn-icon" name="add-circle-outline"></ion-icon>
+                Add
+              </button>
+              <button
+                type="button"
+                className="btn btn-light flex-center"
+                onClick={() => {
+                  history.goBack();
+                }}
+              >
+                <ion-icon
+                  class="btn-icon"
+                  name="close-circle-outline"
+                ></ion-icon>
+                Cancel
+              </button>
             </div>
           </form>
         </div>
