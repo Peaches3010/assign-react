@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { Context } from "../../../store/context/context";
 import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
-const AddTask = () => {
+const AddTask = (props) => {
   const { dispatchTasks } = useContext(Context);
   const history = useHistory();
   const [task, setTask] = useState({
@@ -25,7 +25,7 @@ const AddTask = () => {
         type="button"
         className="btn btn-danger flex-center"
         onClick={() => {
-          history.goback();
+          history.goBack();
         }}
       >
         <ion-icon class="btn-icon" name="arrow-back-circle"></ion-icon>Back

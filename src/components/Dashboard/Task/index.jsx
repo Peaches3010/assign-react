@@ -2,59 +2,70 @@ import PropTypes from "prop-types";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Input } from "reactstrap";
-
 const Task = (props) => {
-  const { title, icon, color, tasks } = props;
+  const { title, color, icon, tasks } = props;
   return (
     <div className="card">
       <div
         className={`card-header d-flex align-items-center justify-content-between ${color} text-white`}
       >
         <h3>{title}</h3>
-        <ion-icon name={icon}></ion-icon>
+        <ion-icon name={icon} style={{ fontSize: "25px" }}></ion-icon>
       </div>
       {title === "Tasks got done" ? (
-        <div className="accordion" id="accordionFlushExample">
+        <div className="accordion" id="accordionPanelsStayOpenExample">
           {tasks.map((task, index) => {
             return (
               <div className="accordion-item" key={index}>
-                <h2 className="accordion-header" id="flush-headingOne">
+                <h2
+                  className="accordion-header"
+                  id={`panelsStayOpen-headingTwo-${index}`}
+                >
                   <button
                     className="accordion-button collapsed"
                     type="button"
                     data-bs-toggle="collapse"
-                    data-bs-target="#flush-collapseOne"
+                    data-bs-target={`#panelsStayOpen-collapse-${index}`}
                     aria-expanded="false"
-                    aria-controls="flush-collapseOne"
+                    aria-controls={`panelsStayOpen-collapse-${index}`}
                   >
                     {task.title}
                   </button>
                 </h2>
                 <div
-                  id="flush-collapseOne"
+                  id={`panelsStayOpen-collapse-${index}`}
                   className="accordion-collapse collapse"
-                  aria-labelledby="flush-headingOne"
-                  data-bs-parent="#accordionFlushExample"
+                  aria-labelledby={`panelsStayOpen-heading-${index}`}
                 >
                   <div className="accordion-body">
-                    <div className="card text-dark -light mb-3">
-                      <div className="card-header">
-                        <Link to={`dashboard/edit/${task.id}`}>
-                          {task.title} detail view{" "}
-                        </Link>
+                    <div className="card text-dark bg-light mb-3">
+                      <div
+                        className="card-header"
+                        style={{
+                          textTransform: "capitalize",
+                          fontSize: "22px",
+                        }}
+                      >
+                        <Link
+                          className="text-decoration-none text-black"
+                          to={`/dashboard/edit/${task.id}`}
+                        >
+                          {task.title} detail view
+                        </Link>{" "}
                       </div>
                       <div className="card-body">
-                        <p className="card-text d-flex align-items-center justifly-content-between">
+                        <p className="card-text d-flex align-items-center justify-content-between">
                           <strong className="card-title">Title:</strong>
                           <Input disabled value={task.title} />
                         </p>
-                        <p className="card-text d-flex align-items-center justifly-content-between">
-                          <strong className="card-title">Title:</strong>
+                        <p className="card-text d-flex align-items-center justify-content-between">
+                          <strong className="card-title">Description:</strong>
                           <textarea
                             className="form-control"
-                            placeholder="leave comment here"
+                            placeholder="Leave a comment here"
                             id="floatingTextarea2"
-                            value={task.desrciption}
+                            style={{ height: 100 }}
+                            value={task.description}
                             disabled
                           />
                         </p>
@@ -86,7 +97,8 @@ const Task = (props) => {
               className="btn btn-primary d-flex align-items-center"
               style={{ width: "100px", marginTop: "1rem" }}
             >
-              <ion-icon name="list" /> Add
+              <ion-icon name="list" class="btn-icon"></ion-icon>
+              Add
             </Link>
           ) : null}
         </ul>
@@ -94,6 +106,7 @@ const Task = (props) => {
     </div>
   );
 };
+
 Task.propTypes = {
   title: PropTypes.string,
   color: PropTypes.string,

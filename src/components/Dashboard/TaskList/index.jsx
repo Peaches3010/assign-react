@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import Task from "../Task";
 import { Context } from "../../../store/context/context";
+import Task from "../Task";
 
 const TaskList = (props) => {
   const { tasks } = useContext(Context);
   return (
-    <div className="row align-items-start">
+    <div className="row align-items-start ">
       <div className="col col-4">
         <Task
           title="New Tasks"
@@ -33,6 +33,7 @@ const TaskList = (props) => {
     </div>
   );
 };
+
 TaskList.propTypes = {};
 
 export default TaskList;

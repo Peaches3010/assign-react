@@ -1,4 +1,5 @@
 import React, { createContext, useReducer } from "react";
+const user_icon = require("../../assets/images/icon-user.png").default;
 const Context = createContext(null);
 
 const initialTask = [
@@ -48,10 +49,9 @@ const initialTask = [
     status: 2,
   },
 ];
-
 const TaskReducer = (state, action) => {
   let index, task;
-  switch (action) {
+  switch (action.type) {
     case "GET_TASKS":
       return state;
     case "UPDATE_TASK":
@@ -64,16 +64,16 @@ const TaskReducer = (state, action) => {
         description: task.description,
       };
       return [...state];
-    case "DELETE_TASK":
-      index = findById(state, task.id);
+    case "REMOVE_TASK":
+      index = findById(state, action.id);
       state.splice(index, 1);
       return [...state];
     case "ADD_TASK":
       task = action.task;
       const newTask = {
-        id: create_UUID(),
         title: task.title,
         description: task.description,
+        id: create_UUID(),
         status: task.status,
       };
       return [...state, newTask];
@@ -81,6 +81,148 @@ const TaskReducer = (state, action) => {
       throw new Error();
   }
 };
+
+const initialUser = [
+  {
+    id: "0ac07e96-46cd-11ec-81d3-0242ac130004",
+    name: "Le Cao",
+    position: "Developer",
+    image: user_icon,
+    password: "123456",
+    email: "lecao123@gmail.com",
+  },
+  {
+    id: "0ac07e96-46cd-11ec-81d3-0242ac130005",
+    name: "Son Dang",
+    position: "QC",
+    image: user_icon,
+    password: "123456",
+    email: "sondang123@gmail.com",
+  },
+  {
+    id: "0ac07e96-46cd-11ec-81d3-0242ac130006",
+    name: "Nhat Dao",
+    position: "Developer",
+    image: user_icon,
+    password: "123456",
+    email: "nhatdao@gmail.com",
+  },
+  {
+    id: "0ac07e96-46cd-11ec-81d3-0242ac130007",
+    name: "Thanh Liem",
+    position: "Developer",
+    image: user_icon,
+    password: "123456",
+    email: "thanhliem123@gmail.com",
+  },
+  {
+    id: "0ac07e96-46cd-11ec-81d3-0242ac130008",
+    name: "Binh Pham",
+    position: "PM",
+    image: user_icon,
+    password: "123456",
+    email: "binhpham123@gmail.com",
+  },
+  {
+    id: "0ac07e96-46cd-11ec-81d3-0242ac130009",
+    name: "Cuong Nguyen",
+    position: "QC",
+    image: user_icon,
+    password: "123456",
+    email: "cuongnguyen123@gmail.com",
+  },
+];
+const UserReducer = (state, action) => {
+  let index, user;
+  switch (action.type) {
+    case "GET_USERS":
+      return state;
+    case "UPDATE_USER":
+      user = action.user;
+      index = findById(state, user.id);
+      state[index] = {
+        ...state[index],
+        name: user.name,
+        position: user.position,
+      };
+      return [...state];
+    case "REMOVE_USER":
+      index = findById(state, action.id);
+      state.splice(index, 1);
+      return [...state];
+    case "ADD_USER":
+      user = action.user;
+      const newUser = {
+        name: user.name,
+        position: user.position,
+        id: create_UUID(),
+        password: "123456",
+        email: "user@gmail.com",
+      };
+      return [...state, newUser];
+    default:
+      throw new Error();
+  }
+};
+const initialSchedule = [
+  {
+    id: "0ac07e96-46cd-11ec-81d3-0242bc130003",
+    title: "Meeting",
+    description: "Release overview",
+    creator: "Le Cao",
+    location: "New York",
+    time_start: new Date(),
+    time_end: new Date(),
+  },
+  {
+    id: "0ac07e96-46cd-11ec-81d3-0242bc130004",
+    title: "Training",
+    description: "Startup",
+    creator: "Son Dang",
+    location: "New York",
+    time_start: new Date(),
+    time_end: new Date(),
+  },
+];
+const ScheduleReducer = (state, action) => {
+  let index, schedule;
+  switch (action.type) {
+    case "GET_SCHEDULES":
+      return state;
+    case "UPDATE_SCHEDULE":
+      schedule = action.schedule;
+      index = findById(state, state.id);
+      state[index] = {
+        ...state[index],
+        location: schedule.location,
+        title: schedule.title,
+        description: schedule.description,
+        creator: schedule.creator,
+        time_start: schedule.time_start,
+        time_end: schedule.time_end,
+      };
+      return [...state];
+    case "REMOVE_SCHDULE":
+      index = findById(state, action.id);
+      state.splice(index, 1);
+      return [...state];
+    case "ADD_SCHEDULE":
+      schedule = action.schedule;
+      const newSchedule = {
+        location: schedule.location,
+        title: schedule.title,
+        description: schedule.description,
+        creator: schedule.creator,
+        time_start: schedule.time_start,
+        time_end: schedule.time_end,
+        id: create_UUID(),
+      };
+      return [...state, newSchedule];
+    default:
+      throw new Error();
+  }
+};
+
 function create_UUID() {
   var temp_url = URL.createObjectURL(new Blob());
   var uuid = temp_url.toString();
@@ -96,7 +238,20 @@ const findById = (state, id) => {
 
 const ContextProvider = (props) => {
   const [tasks, dispatchTasks] = useReducer(TaskReducer, initialTask);
-  let value = { tasks, dispatchTasks };
+  const [users, dispatchUsers] = useReducer(UserReducer, initialUser);
+  const [schedules, dispatchSchedules] = useReducer(
+    ScheduleReducer,
+    initialSchedule
+  );
+
+  let value = {
+    tasks,
+    dispatchTasks,
+    users,
+    dispatchUsers,
+    schedules,
+    dispatchSchedules,
+  };
   return <Context.Provider value={value}>{props.children}</Context.Provider>;
 };
 
